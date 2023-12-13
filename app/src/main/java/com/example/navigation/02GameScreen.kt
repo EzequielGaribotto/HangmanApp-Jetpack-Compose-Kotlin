@@ -33,7 +33,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
-    var estado by remember { mutableStateOf("") }
+    var estado by remember { mutableStateOf("Derrota") }
     var intentosConsumidos by remember { mutableIntStateOf(0) }
     Column(
         modifier = Modifier
