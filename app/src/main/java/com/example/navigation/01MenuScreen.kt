@@ -47,7 +47,11 @@ fun MenuScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Componentes
-        Column(Modifier.padding(20.dp)) {
+        Column(
+            Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
             // Logo
             Box(
@@ -56,7 +60,7 @@ fun MenuScreen(navController: NavController) {
                         painterResource(id = R.drawable.amongus),
                         contentScale = ContentScale.FillBounds
                     )
-                    .size(300.dp)
+                    .size(120.dp),
             )
 
             // Placeholder

@@ -32,8 +32,9 @@ fun ResultScreen(
     intentosConsumidos: Int
 ) {
     val missatge by remember { mutableStateOf(if (estado == "Victoria") "Has ganado después de $intentosConsumidos intentos"
-    else "Has consumido todos los intentos sin éxito :(") }
-    val titol by remember { mutableStateOf( if (estado == "Victoria") "Felicidades" else "Oh no")}
+                                              else "Has consumido todos los intentos sin éxito :(") }
+    val titol by remember { mutableStateOf( if (estado == "Victoria") "Felicidades"
+                                            else "Oh no")}
     Column(
         modifier = Modifier
             .fillMaxSize()

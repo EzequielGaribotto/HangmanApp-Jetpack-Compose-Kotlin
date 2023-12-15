@@ -67,8 +67,8 @@ class MainActivity : ComponentActivity() {
                                 navigationController,
                                 backStackEntry.arguments?.getString("dificultadSeleccionada")
                                     .orEmpty(),
-                                backStackEntry.arguments?.getString("additionalStringArgument").orEmpty(),
-                                backStackEntry.arguments?.getInt("additionalIntArgument") ?: 0
+                                backStackEntry.arguments?.getString("estado").orEmpty(),
+                                backStackEntry.arguments?.getInt("intentosConsumidos") ?: 0
                             )
                         }
                     }
