@@ -16,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,10 +28,12 @@ fun ResultScreen(
     navController: NavController,
     dificultadSeleccionada: String,
     estado: String,
-    intentosConsumidos: Int
+    intentosConsumidos: Int,
+    secretWord:String
 ) {
     val missatge by remember { mutableStateOf(if (estado == "Victoria") "Has ganado después de $intentosConsumidos intentos"
-                                              else "Has consumido todos los intentos sin éxito :(") }
+                                              else "Has consumido todos los intentos sin éxito :(\n" +
+                                                   "La palabra secreta era $secretWord") }
     val titol by remember { mutableStateOf( if (estado == "Victoria") "Felicidades"
                                             else "Oh no")}
     Column(

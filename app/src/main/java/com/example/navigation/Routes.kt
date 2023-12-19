@@ -7,8 +7,8 @@ sealed class Routes(val route: String) {
         fun createRoute(dificultadSeleccionada: String) = "GameScreen/$dificultadSeleccionada"
     }
 
-    object ResultScreen : Routes("ResultScreen/{dificultadSeleccionada}/{estado}/{intentosConsumidos}") {
-        fun createRoute(dificultadSeleccionada: String, estado:String, intentosConsumidos:Int) =
-            "ResultScreen/$dificultadSeleccionada/$estado/$intentosConsumidos"
+    object ResultScreen : Routes("ResultScreen/{dificultadSeleccionada}/{estado}/{intentosConsumidos}/{secretWord}") {
+        fun createRoute(dificultadSeleccionada: String, estado:String, intentosConsumidos:Int, secretWord:String) =
+            "ResultScreen/$dificultadSeleccionada/$estado/$intentosConsumidos/$secretWord"
     }
 }

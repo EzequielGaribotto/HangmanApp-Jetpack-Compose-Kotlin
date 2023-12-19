@@ -44,12 +44,44 @@ import androidx.navigation.NavController
 @Composable
 fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
     var estado by remember { mutableStateOf("Jugando") }
-    var attempts by remember { mutableIntStateOf(6) }
+    data class GameParameters(val attempts: Int, val maxWordLength: Int, val minWordLength: Int)
+
+    val gameParameters by remember { mutableStateOf(
+        when (dificultadSeleccionada) {
+            "Muy fácil" -> GameParameters(10, 6, 0)
+            "Fácil" -> GameParameters(9, 7, 0)
+            "Intermedia" -> GameParameters(8, 8, 0)
+            "Alta" -> GameParameters(7, 9, 0)
+            "Muy alta" -> GameParameters(6, 50, 7)
+            else -> GameParameters(0, 0, 0)
+        }
+    ) }
+
     var intentosConsumidos by remember { mutableIntStateOf(0) }
-    var secretWord by remember { mutableStateOf("patata".uppercase()) }
+    val palabras = arrayOf(
+        "manzana", "pera", "platano", "uva", "sandia",
+        "kiwi", "fresa", "mango", "melocoton", "ciruela",
+        "naranja", "limon", "pomelo", "mandarina", "cereza",
+        "frambuesa", "arandano", "granada", "higo", "papaya",
+        "piña", "coco", "avellana", "almendra", "cacahuete",
+        "nuez", "castaña", "cereza", "ciruela", "uva",
+        "pimiento", "tomate", "berenjena", "calabacin", "pepino",
+        "zanahoria", "patata", "cebolla", "ajo", "lechuga",
+        "espinaca", "coliflor", "brocoli", "repollo", "alcachofa",
+        "calabaza", "calabacín", "remolacha", "rabanito", "apio"
+    )
+    var random by remember { mutableIntStateOf(0)}
+    var fullfillsMaxWordLength = false
+    while (!fullfillsMaxWordLength) {
+        random  = (palabras.indices).random()
+        if (palabras[random].length in minWordLength..maxWordLength) {
+            fullfillsMaxWordLength = true
+        }
+    }
+    val secretWord by remember { mutableStateOf(palabras[random].uppercase()) }
     var hiddenWord by remember { mutableStateOf("_".repeat(secretWord.length)) }
     var hangmanPicture by remember { mutableIntStateOf(R.drawable.hangman01)}
-    var letrasAbecedario by remember {
+    val letrasAbecedario by remember {
         mutableStateOf(
             arrayOf(
                 'A',
@@ -82,7 +114,7 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
             )
         )
     }
-    var hangmanPicturesArray = arrayOf(
+    val  hangmanPicturesArray = arrayOf(
         R.drawable.hangman01,
         R.drawable.hangman02,
         R.drawable.hangman03,
@@ -128,14 +160,15 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
         repeat(5) { rowIndex ->
             Row(modifier = Modifier.padding(5.dp)) {
                 repeat(6) { colIndex ->
+                    var backgroundCharColor by remember { mutableStateOf(Color.White)}
                     val letraIndex = rowIndex * 6 + colIndex
                     if (letraIndex < letrasAbecedario.size) {
                         Box(modifier = Modifier
-                            .background(Color.White)
                             .height(50.dp)
                             .width(50.dp)
                             .padding(5.dp)
                             .border(width = 5.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
+                            .background(backgroundCharColor)
                             .clickable {
                                 intentosConsumidos++
                                 attempts--
@@ -145,9 +178,11 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                                         if (letrasAbecedario[letraIndex] == secretWord[letra]) {
                                             newHiddenWord[letra] = letrasAbecedario[letraIndex]
                                         }
+                                        backgroundCharColor = Color.Green
                                     }
                                 } else {
                                     hangmanPicture = hangmanPicturesArray[intentosConsumidos-1]
+                                    backgroundCharColor = Color.Red
                                 }
                                 hiddenWord = String(newHiddenWord)
                                 if (hiddenWord == secretWord) {
@@ -158,15 +193,16 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                                 if (estado !="Jugando") {
                                     navController.navigate(
                                         Routes.ResultScreen.createRoute(
-                                            dificultadSeleccionada, estado, intentosConsumidos
-                                        )
+                                            dificultadSeleccionada, estado, intentosConsumidos, secretWord)
                                     )
                                 }
+
                             }) {
                             Text(
                                 text = letrasAbecedario[letraIndex].toString(),
                                 color = Color.Black,
                                 modifier = Modifier.align(Alignment.Center)
+                                    .background(backgroundCharColor),
                             )
                         }
                     }

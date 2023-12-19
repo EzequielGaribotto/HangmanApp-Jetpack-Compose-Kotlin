@@ -52,44 +52,27 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(
                             Routes.ResultScreen.route,
-                            arguments = listOf(
-                                navArgument("dificultadSeleccionada") {
+                            arguments = listOf(navArgument("dificultadSeleccionada") {
                                 type = NavType.StringType
-                            },
-                                navArgument("estado") {
+                            }, navArgument("estado") {
                                 type = NavType.StringType
-                            },
-                                navArgument("intentosConsumidos") {
-                                    type = NavType.IntType
-                                })
+                            }, navArgument("intentosConsumidos") {
+                                type = NavType.IntType
+                            }, navArgument("secretWord") {
+                                type = NavType.StringType
+                            })
                         ) { backStackEntry ->
                             ResultScreen(
                                 navigationController,
-                                backStackEntry.arguments?.getString("dificultadSeleccionada")
-                                    .orEmpty(),
+                                backStackEntry.arguments?.getString("dificultadSeleccionada").orEmpty(),
                                 backStackEntry.arguments?.getString("estado").orEmpty(),
-                                backStackEntry.arguments?.getInt("intentosConsumidos") ?: 0
+                                backStackEntry.arguments?.getInt("intentosConsumidos") ?: 0,
+                                backStackEntry.arguments?.getString("secretWord").orEmpty()
                             )
                         }
                     }
                 }
             }
         }
-    }
-}
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!", modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NavigationTheme {
-        Greeting("Android")
     }
 }

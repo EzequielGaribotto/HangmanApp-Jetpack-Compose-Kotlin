@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +37,7 @@ import androidx.navigation.NavController
 fun MenuScreen(navController: NavController) {
     var dificultadSeleccionada by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-    val dificultades = listOf("Muy facil", "Facil", "Media", "Alta", "Muy alta")
+    val dificultades = listOf("Muy fácil", "Fácil", "Intermedia", "Alta", "Muy alta")
 
     // Fondo de pantalla
     Column(
@@ -107,16 +108,41 @@ fun MenuScreen(navController: NavController) {
 
         // BOTÓN "AYUDA"
         Spacer(modifier = Modifier.height(65.dp))
+        var show by remember { mutableStateOf(false) }
         Box(modifier = Modifier
             .background(Color.Red)
             .height(50.dp)
             .width(120.dp)
             .clickable {
-                // TODO: MOSTRAR AYUDA EN LA MISMA PANTALLA
+                show = true
             }) {
             Text(
                 text = "Help", modifier = Modifier.align(Alignment.Center), color = Color.White
             )
+            MyDialog(show) { show = false }
+        }
+    }
+}
+@Composable
+fun MyDialog(show: Boolean, onDismiss: () -> Unit){
+    if(show){
+        Dialog(onDismissRequest = { onDismiss() }) {
+            Column(
+                Modifier.background(Color.White)
+                    .padding(24.dp).fillMaxWidth()) {
+                Text(text =
+                "El juego del ahorcado consiste en adivinar una palabra oculta aleatoria " +
+                        "Para adivinar la palabra se tienen que escoger letras para revelar de la palabra " +
+                        "que aparecerá en la parte superior de la pantalla, si la letra escogida está en la palabra " +
+                        "oculta, se revelarán todas las letras coincidentes, en caso contrario, no.\n" +
+                        "\n" +
+                        "===DIFICULTADES===\n" +
+                        "Muy fácil: 10 intentos, longitud de palabra inferior a 6 \n" +
+                        "Fácil: 9 intentos, longitud de palabra inferior a 7 \n" +
+                        "Intermedia: 8 intentos, longitud de palabra inferior a 8\n" +
+                        "Alta: 7 intentos, longitud de palabra inferior a 9\n" +
+                        "Muy alta: 6 intentos, longitud de palabra entre 7 y 20\n")
+            }
         }
     }
 }
