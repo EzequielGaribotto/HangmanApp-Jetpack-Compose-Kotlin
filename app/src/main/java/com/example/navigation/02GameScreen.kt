@@ -48,7 +48,7 @@ val palabras = arrayOf(
     "calabaza", "calabacín", "remolacha", "rabanito", "apio"
 )
 
-val hangmanPictures = arrayOf(
+val imagenesAhorcado = arrayOf(
     R.drawable.hangman01,
     R.drawable.hangman02,
     R.drawable.hangman03,
@@ -66,25 +66,25 @@ val letrasAbecedario =
             'X', 'Y', 'Z'
         )
 
-data class GameParameters(var attempts: Int = 0, val maxWordLength: Int = 0, val minWordLength: Int = 0)
+data class GameParameters(var intentos: Int = 0, val maxWordLength: Int = 0, val minWordLength: Int = 0)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
     var estado by remember { mutableStateOf("Jugando") }
     val params by remember { mutableStateOf( getGameParameters(dificultadSeleccionada) ) }
     var intentosConsumidos by remember { mutableIntStateOf(0) }
-    val secretWord by remember { mutableStateOf( findValidWord(params,palabras) ) }
-    var hiddenWord by remember { mutableStateOf( "_".repeat(secretWord.length) ) }
-    var hangmanState by remember { mutableIntStateOf( R.drawable.hangman00 )}
-    var pictureIndex by remember { mutableIntStateOf(hangmanPictures.size - params.attempts)}
+    val palabraSecreta by remember { mutableStateOf( encontrarPalabraValida(params,palabras) ) }
+    var palabraEscondida by remember { mutableStateOf( "_".repeat(palabraSecreta.length) ) }
+    var estadoAhorcado by remember { mutableIntStateOf( R.drawable.hangman00 )}
+    var indexImagen by remember { mutableIntStateOf(imagenesAhorcado.size - params.intentos)}
     val filas by remember { mutableIntStateOf(5) }
     val columnas by remember { mutableIntStateOf(6) }
-    val pressedKeys by remember {
+    val letrasPresionadas by remember {
         mutableStateOf(
             Array(letrasAbecedario.size) { false }
         )
     }
-    var showTextField by remember { mutableStateOf(false) }
+    var mostrarTextField by remember { mutableStateOf(false) }
     var palabraEscrita by remember { mutableStateOf("")}
     Column(
         modifier = Modifier
@@ -104,7 +104,7 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                     .fillMaxWidth()
             ) {
                 Text(
-                    hiddenWord,
+                    palabraEscondida,
                     modifier = Modifier.align(Alignment.Center),
                     color = Color.Black,
                     fontSize = 43.sp,
@@ -112,19 +112,19 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                 )
             }
         }
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Box(
             modifier = Modifier
                 .size(150.dp)
                 .paint(
-                    painterResource(id = hangmanState),
+                    painterResource(id = estadoAhorcado),
                     contentScale = ContentScale.FillBounds
                 )
         )
-        if (params.attempts > 0) repeat(filas) { rowIndex ->
+        if (params.intentos > 0) repeat(filas) { filaIndex ->
             Row(modifier = Modifier.padding(5.dp)) {
                 repeat(columnas) { colIndex ->
-                    val letraIndex = rowIndex * columnas + colIndex
+                    val letraIndex = filaIndex * columnas + colIndex
                     if (letraIndex < letrasAbecedario.size) {
                         var backgroundCharColor by remember { mutableStateOf(Color.White)}
                         Box(modifier = Modifier
@@ -134,21 +134,21 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                             .border(width = 5.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
                             .background(backgroundCharColor, shape = RoundedCornerShape(8.dp))
                             .clickable {
-                                if (!pressedKeys[letraIndex]) {
-                                    pressedKeys[letraIndex] = true
+                                if (!letrasPresionadas[letraIndex]) {
+                                    letrasPresionadas[letraIndex] = true
                                     intentosConsumidos++
-                                    if (letrasAbecedario[letraIndex] in secretWord) {
-                                        hiddenWord = updateHiddenWord(hiddenWord,secretWord,letrasAbecedario,letraIndex)
+                                    if (letrasAbecedario[letraIndex] in palabraSecreta) {
+                                        palabraEscondida = actualizarPalabraEscondida(palabraEscondida,palabraSecreta,letrasAbecedario,letraIndex)
                                         backgroundCharColor = Color.Green
                                     } else {
-                                        hangmanState = hangmanPictures[pictureIndex]
+                                        estadoAhorcado = imagenesAhorcado[indexImagen]
                                         backgroundCharColor = Color.Red
-                                        pictureIndex++
-                                        params.attempts--
+                                        indexImagen++
+                                        params.intentos--
                                     }
-                                    estado = updateGameState(hiddenWord,secretWord,params,palabraEscrita)
+                                    estado = actualizarEstadoDelJuego(palabraEscondida,palabraSecreta,params,palabraEscrita)
                                     if (estado != "Jugando") {
-                                        navController.navigate(Routes.ResultScreen.createRoute(dificultadSeleccionada, estado, intentosConsumidos, secretWord))
+                                        navController.navigate(Routes.ResultScreen.createRoute(dificultadSeleccionada, estado, intentosConsumidos, palabraSecreta))
                                     }
                                 }
                             }) {
@@ -170,24 +170,23 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                 .fillMaxWidth()
         ) {
             Text(
-                "INTENTOS: ${params.attempts}",
+                "INTENTOS: ${params.intentos}",
                 modifier = Modifier.align(Alignment.Center),
                 color = Color.Black,
                 fontSize = 43.sp
             )
         }
     }
-    Column(verticalArrangement = Arrangement.Bottom) {
+    Column(verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally) {
         Box(modifier = Modifier
             .fillMaxWidth()
             .background(Color.Red)
             .height(50.dp)
-            .clickable { showTextField = true }) {
-            Text(
-                text = "ESCRIBIR", modifier = Modifier.align(Alignment.Center), color = Color.White
-            )
+            .clickable { mostrarTextField = !mostrarTextField}) {
+            Text(text = "ESCRIBIR", modifier = Modifier.align(Alignment.Center), color = Color.White)
         }
-        if (showTextField) {
+        if (mostrarTextField) {
             TextField(
                 value = palabraEscrita.uppercase(),
                 onValueChange = { palabraEscrita = it.uppercase() },
@@ -196,19 +195,28 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                     .padding(16.dp)
             )
             Button(onClick = {
-                intentosConsumidos++
-                showTextField = false
-                if (palabraEscrita != secretWord) {
-                    params.attempts--
-                    hangmanState = hangmanPictures[pictureIndex]
-                    pictureIndex++
+                if (palabraEscrita != "") {
+                    intentosConsumidos++
+                    if (palabraEscrita != palabraSecreta) {
+                        params.intentos--
+                        estadoAhorcado = imagenesAhorcado[indexImagen]
+                        indexImagen++
+                    }
+                    estado = actualizarEstadoDelJuego(palabraEscondida, palabraSecreta, params, palabraEscrita)
+                    if (estado != "Jugando") {
+                        navController.navigate(
+                            Routes.ResultScreen.createRoute(
+                                dificultadSeleccionada,
+                                estado,
+                                intentosConsumidos,
+                                palabraSecreta
+                            )
+                        )
+                    }
                 }
-                estado = updateGameState(hiddenWord, secretWord, params, palabraEscrita)
-                if (estado != "Jugando") {
-                    navController.navigate(Routes.ResultScreen.createRoute(dificultadSeleccionada, estado, intentosConsumidos, secretWord))
-                }
+                mostrarTextField = false
             }) {
-                Text("Aceptar")
+                Text(text = "Aceptar", modifier = Modifier.align(Alignment.CenterVertically), color = Color.White)
             }
         }
     }
@@ -220,40 +228,40 @@ fun getGameParameters(dificultad: String): GameParameters {
         "Fácil" -> GameParameters(6, 8, 0)
         "Intermedia" -> GameParameters(6, 10, 0)
         "Alta" -> GameParameters(5, 12, 0)
-        else -> GameParameters(4, 50, 7)
+        else -> GameParameters(4, 20, 7)
     }
 }
 
-fun findValidWord(params: GameParameters, palabras: Array<String>): String {
+fun encontrarPalabraValida(params: GameParameters, palabras: Array<String>): String {
     var validWord = false
     var randomIndex = (palabras.indices).random()
 
     while (!validWord) {
-        if (palabras[randomIndex].length in params.minWordLength..params.maxWordLength) {
+        if (palabras[randomIndex].length in params.minWordLength until params.maxWordLength) {
             validWord = true
         } else {
             randomIndex = (palabras.indices).random()
         }
     }
-
-    return palabras[randomIndex].uppercase()
+    val palabraValida = palabras[randomIndex].uppercase()
+    return palabraValida
 }
 
-fun updateHiddenWord(hiddenWord:String,secretWord:String,letrasAbecedario:Array<Char>,letraIndex:Int):String{
-    val newHiddenWord = hiddenWord.toCharArray()
-    for (letra in secretWord.indices) {
-        if (letrasAbecedario[letraIndex] == secretWord[letra]) {
+fun actualizarPalabraEscondida(palabraEscondida:String,palabraSecreta:String,letrasAbecedario:Array<Char>,letraIndex:Int):String{
+    val newHiddenWord = palabraEscondida.toCharArray()
+    for (letra in palabraSecreta.indices) {
+        if (letrasAbecedario[letraIndex] == palabraSecreta[letra]) {
             newHiddenWord[letra] = letrasAbecedario[letraIndex]
         }
     }
     return String(newHiddenWord)
 }
 
-fun updateGameState(hiddenWord:String,secretWord:String, params:GameParameters, palabraEscrita:String):String {
+fun actualizarEstadoDelJuego(palabraEscondida:String,palabraSecreta:String, params:GameParameters, palabraEscrita:String):String {
     var estado = "Jugando"
-    if (hiddenWord == secretWord || palabraEscrita == secretWord) {
+    if (palabraEscondida == palabraSecreta || palabraEscrita == palabraSecreta) {
         estado = "Victoria"
-    } else if (params.attempts == 0) {
+    } else if (params.intentos == 0) {
         estado = "Derrota"
     }
     return estado

@@ -113,18 +113,14 @@ fun MenuScreen(navController: NavController) {
             .background(Color.Red)
             .height(50.dp)
             .width(120.dp)
-            .clickable {
-                show = true
-            }) {
-            Text(
-                text = "Help", modifier = Modifier.align(Alignment.Center), color = Color.White
-            )
+            .clickable { show = true }) {
+            Text(text = "Ayuda", modifier = Modifier.align(Alignment.Center), color = Color.White)
             MyDialog(show) { show = false }
         }
     }
 }
 @Composable
-fun MyDialog(show: Boolean, onDismiss: () -> Unit){
+fun MyDialog(show: Boolean, onDismiss: () -> Unit) {
     if(show){
         Dialog(onDismissRequest = { onDismiss() }) {
             Column(
@@ -137,11 +133,11 @@ fun MyDialog(show: Boolean, onDismiss: () -> Unit){
                         "oculta, se revelarán todas las letras coincidentes, en caso contrario, no.\n" +
                         "\n" +
                         "===DIFICULTADES===\n" +
-                        "Muy fácil: 10 intentos, longitud de palabra inferior a 6 \n" +
-                        "Fácil: 9 intentos, longitud de palabra inferior a 7 \n" +
-                        "Intermedia: 8 intentos, longitud de palabra inferior a 8\n" +
-                        "Alta: 7 intentos, longitud de palabra inferior a 9\n" +
-                        "Muy alta: 6 intentos, longitud de palabra entre 7 y 20\n")
+                        "Muy fácil: 6 intentos, longitud de palabra inferior a 6 \n" +
+                        "Fácil: 6 intentos, longitud de palabra inferior a 8 \n" +
+                        "Intermedia: 6 intentos, longitud de palabra inferior a 10\n" +
+                        "Alta: 5 intentos, longitud de palabra inferior a 12\n" +
+                        "Muy alta: 4 intentos, longitud de palabra entre 7 y 20\n")
             }
         }
     }
