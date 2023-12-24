@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,10 +32,10 @@ fun ResultScreen(
     intentosConsumidos: Int,
     secretWord:String
 ) {
-    val missatge by remember { mutableStateOf(if (estado == "Victoria") "Has ganado después de $intentosConsumidos intentos"
+    val mensaje by remember { mutableStateOf(if (estado == "Victoria") "Has ganado después de $intentosConsumidos intentos"
                                               else "Has consumido todos los intentos sin éxito :(\n" +
                                                    "La palabra secreta era $secretWord") }
-    val titol by remember { mutableStateOf( if (estado == "Victoria") "Felicidades"
+    val titulo by remember { mutableStateOf( if (estado == "Victoria") "Felicidades"
                                             else "Oh no")}
     Column(
         modifier = Modifier
@@ -47,7 +48,7 @@ fun ResultScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (titol.isNotBlank()) {
+            if (titulo.isNotBlank()) {
                 Box(
                     modifier = Modifier
                         .background(Color.White)
@@ -55,11 +56,11 @@ fun ResultScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        titol, modifier = Modifier.align(Alignment.Center), color = Color.Black, fontSize = 43.sp
+                        titulo, modifier = Modifier.align(Alignment.Center), color = Color.Black, fontSize = 43.sp
                     )
                 }
             }
-            if (missatge.isNotBlank()) {
+            if (mensaje.isNotBlank()) {
                 Box(
                     modifier = Modifier
                         .background(Color.White)
@@ -67,13 +68,13 @@ fun ResultScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        missatge, modifier = Modifier.align(Alignment.Center), color = Color.Black
+                        mensaje, modifier = Modifier.align(Alignment.Center), color = Color.Black
                     )
                 }
             }
             // BOTÓN "JUGAR DE NUEVO"
             Box(modifier = Modifier
-                .background(Color.Red)
+                .background(Color.Red, shape = RoundedCornerShape(12.dp))
                 .height(50.dp)
                 .width(120.dp)
                 .clickable {
@@ -82,14 +83,14 @@ fun ResultScreen(
                 Text(
                     text = "Jugar de nuevo",
                     modifier = Modifier.align(Alignment.Center),
-                    color = Color.White
+                    color = Color.White,
                 )
             }
 
             // BOTÓN "VOLVER AL MENÚ"
-            Spacer(modifier = Modifier.height(65.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             Box(modifier = Modifier
-                .background(Color.Red)
+                .background(Color.Red, shape = RoundedCornerShape(12.dp))
                 .height(50.dp)
                 .width(120.dp)
                 .clickable {

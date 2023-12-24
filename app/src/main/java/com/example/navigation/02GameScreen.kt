@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -194,29 +193,37 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                     .fillMaxWidth()
                     .padding(16.dp)
             )
-            Button(onClick = {
-                if (palabraEscrita != "") {
-                    intentosConsumidos++
-                    if (palabraEscrita != palabraSecreta) {
-                        params.intentos--
-                        estadoAhorcado = imagenesAhorcado[indexImagen]
-                        indexImagen++
-                    }
-                    estado = actualizarEstadoDelJuego(palabraEscondida, palabraSecreta, params, palabraEscrita)
-                    if (estado != "Jugando") {
-                        navController.navigate(
-                            Routes.ResultScreen.createRoute(
-                                dificultadSeleccionada,
-                                estado,
-                                intentosConsumidos,
-                                palabraSecreta
+            Box(modifier = Modifier
+                .background(Color.Red, shape = RoundedCornerShape(12.dp))
+                .height(50.dp)
+                .width(120.dp)
+                .clickable {
+                    if (palabraEscrita != "") {
+                        intentosConsumidos++
+                        if (palabraEscrita != palabraSecreta) {
+                            params.intentos--
+                            estadoAhorcado = imagenesAhorcado[indexImagen]
+                            indexImagen++
+                        }
+                        estado = actualizarEstadoDelJuego(palabraEscondida, palabraSecreta, params, palabraEscrita)
+                        if (estado != "Jugando") {
+                            navController.navigate(
+                                Routes.ResultScreen.createRoute(
+                                    dificultadSeleccionada,
+                                    estado,
+                                    intentosConsumidos,
+                                    palabraSecreta
+                                )
                             )
-                        )
+                        }
                     }
-                }
-                mostrarTextField = false
-            }) {
-                Text(text = "Aceptar", modifier = Modifier.align(Alignment.CenterVertically), color = Color.White)
+                    mostrarTextField = false
+                }) {
+                Text(
+                    text = "Probar",
+                    modifier = Modifier.align(Alignment.Center),
+                    color = Color.White,
+                )
             }
         }
     }

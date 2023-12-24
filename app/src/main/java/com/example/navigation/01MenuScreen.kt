@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
@@ -61,11 +62,9 @@ fun MenuScreen(navController: NavController) {
                         painterResource(id = R.drawable.amongus),
                         contentScale = ContentScale.FillBounds
                     )
-                    .size(120.dp),
             )
 
             // Placeholder
-
             OutlinedTextField(value = dificultadSeleccionada,
                 onValueChange = { dificultadSeleccionada = it },
                 enabled = false,
@@ -73,25 +72,27 @@ fun MenuScreen(navController: NavController) {
                 label = { Text("Dificultad") },
                 modifier = Modifier
                     .clickable { expanded = true }
-                    .fillMaxWidth())
+                    .width(120.dp))
 
             // Selección dificultad
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .width(120.dp)
             ) {
                 dificultades.forEach { dificultad ->
                     DropdownMenuItem(text = { Text(text = dificultad) }, onClick = {
                         expanded = false
                         dificultadSeleccionada = dificultad
-                    })
+                    }, modifier = Modifier
+                        .width(120.dp))
                 }
             }
         }
         // BOTÓN "JUGAR"
         Box(modifier = Modifier
-            .background(Color.Red)
+            .background(Color.Red, shape = RoundedCornerShape(12.dp))
             .height(50.dp)
             .width(120.dp)
             .clickable {
@@ -107,10 +108,10 @@ fun MenuScreen(navController: NavController) {
         }
 
         // BOTÓN "AYUDA"
-        Spacer(modifier = Modifier.height(65.dp))
+        Spacer(modifier = Modifier.height(15.dp))
         var show by remember { mutableStateOf(false) }
         Box(modifier = Modifier
-            .background(Color.Red)
+            .background(Color.Red, shape = RoundedCornerShape(12.dp))
             .height(50.dp)
             .width(120.dp)
             .clickable { show = true }) {
@@ -121,24 +122,40 @@ fun MenuScreen(navController: NavController) {
 }
 @Composable
 fun MyDialog(show: Boolean, onDismiss: () -> Unit) {
-    if(show){
-        Dialog(onDismissRequest = { onDismiss() }) {
-            Column(
-                Modifier.background(Color.White)
-                    .padding(24.dp).fillMaxWidth()) {
-                Text(text =
-                "El juego del ahorcado consiste en adivinar una palabra oculta aleatoria " +
-                        "Para adivinar la palabra se tienen que escoger letras para revelar de la palabra " +
-                        "que aparecerá en la parte superior de la pantalla, si la letra escogida está en la palabra " +
-                        "oculta, se revelarán todas las letras coincidentes, en caso contrario, no.\n" +
-                        "\n" +
-                        "===DIFICULTADES===\n" +
-                        "Muy fácil: 6 intentos, longitud de palabra inferior a 6 \n" +
-                        "Fácil: 6 intentos, longitud de palabra inferior a 8 \n" +
-                        "Intermedia: 6 intentos, longitud de palabra inferior a 10\n" +
-                        "Alta: 5 intentos, longitud de palabra inferior a 12\n" +
-                        "Muy alta: 4 intentos, longitud de palabra entre 7 y 20\n")
+    if (show) {
+        Dialog(
+            onDismissRequest = { onDismiss() }
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Color.Gray.copy(alpha = 0.90f), shape = RoundedCornerShape(12.dp))
+                    .padding(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "El juego del ahorcado consiste en adivinar una palabra oculta aleatoria " +
+                                "Para adivinar la palabra se tienen que escoger letras para revelar de la palabra " +
+                                "que aparecerá en la parte superior de la pantalla, si la letra escogida está en la palabra " +
+                                "oculta, se revelarán todas las letras coincidentes, en caso contrario, no.\n" +
+                                "\n" +
+                                "===DIFICULTADES===\n" +
+                                "Muy fácil: 6 intentos, longitud de palabra inferior a 6 \n" +
+                                "Fácil: 6 intentos, longitud de palabra inferior a 8 \n" +
+                                "Intermedia: 6 intentos, longitud de palabra inferior a 10\n" +
+                                "Alta: 5 intentos, longitud de palabra inferior a 12\n" +
+                                "Muy alta: 4 intentos, longitud de palabra entre 7 y 20",
+                        modifier = Modifier.padding(8.dp),
+                        textAlign = TextAlign.Center,
+                        color = Color.White
+                    )
+                }
             }
         }
     }
 }
+
+
