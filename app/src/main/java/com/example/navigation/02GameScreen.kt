@@ -280,5 +280,5 @@ fun String.normalize(): String {
         .replace("í", "i")
         .replace("ó", "o")
         .replace("ú", "u")
-        .toLowerCase()
+        .lowercase()
 }
