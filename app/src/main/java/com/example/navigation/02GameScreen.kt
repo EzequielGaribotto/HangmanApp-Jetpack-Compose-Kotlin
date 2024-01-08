@@ -45,7 +45,7 @@ val palabras = arrayOf(
     "zanahoria", "patata", "cebolla", "ajo", "lechuga",
     "espinaca", "coliflor", "brocoli", "repollo", "alcachofa",
     "calabaza", "calabacín", "remolacha", "rabanito", "apio"
-)
+).map { it.normalize() }.toTypedArray()
 
 val imagenesAhorcado = arrayOf(
     R.drawable.hangman01,
@@ -272,4 +272,13 @@ fun actualizarEstadoDelJuego(palabraEscondida:String,palabraSecreta:String, para
         estado = "Derrota"
     }
     return estado
+}
+
+fun String.normalize(): String {
+    return this.replace("á", "a")
+        .replace("é", "e")
+        .replace("í", "i")
+        .replace("ó", "o")
+        .replace("ú", "u")
+        .toLowerCase()
 }
