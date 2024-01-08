@@ -140,7 +140,7 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                                     } else {
                                         backgroundCharColor = Color.Red
                                     }
-                                    palabraEscondida = actualizarPalabraEscondida(palabraEscondida,palabraSecreta,letrasAbecedario,letraIndex,palabraEscrita, params, state)
+                                    palabraEscondida = actualizarPalabraEscondida(palabraEscondida,palabraSecreta,letrasAbecedario,letraIndex, params, state)
                                     estado = actualizarEstadoDelJuego(palabraEscondida,palabraSecreta,params,palabraEscrita)
                                     if (estado != "Jugando") {
                                         navController.navigate(Routes.ResultScreen.createRoute(dificultadSeleccionada, estado, state.intentosConsumidos, palabraSecreta))
@@ -264,14 +264,11 @@ fun encontrarPalabraValida(params: GameParameters, palabras: Array<String>): Str
     return palabraValida
 }
 
-fun actualizarPalabraEscondida(palabraEscondida:String,palabraSecreta:String,letrasAbecedario:Array<Char>,letraIndex:Int, palabraEscrita:String, params:GameParameters, state:GameState):String{
+fun actualizarPalabraEscondida(palabraEscondida:String,palabraSecreta:String,letrasAbecedario:Array<Char>,letraIndex:Int, params:GameParameters, state:GameState):String{
     val newHiddenWord = palabraEscondida.toCharArray()
     for (letra in palabraSecreta.indices) {
         if (letrasAbecedario[letraIndex] == palabraSecreta[letra].toString().normalize().single()) {
             newHiddenWord[letra] = palabraSecreta[letra]
-        }
-        if (palabraEscrita.length == palabraSecreta.length && palabraEscrita[letra] == palabraSecreta[letra].toString().normalize().single()) {
-            newHiddenWord[letra] = palabraEscrita[letra]
         }
     }
     if (String(newHiddenWord) == palabraEscondida) {
