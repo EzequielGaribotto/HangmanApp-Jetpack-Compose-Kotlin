@@ -59,7 +59,7 @@ fun MenuScreen(navController: NavController) {
             Box(
                 modifier = Modifier
                     .paint(
-                        painterResource(id = R.drawable.amongus),
+                        painterResource(id = R.drawable.logo),
                         contentScale = ContentScale.FillBounds
                     )
             )
