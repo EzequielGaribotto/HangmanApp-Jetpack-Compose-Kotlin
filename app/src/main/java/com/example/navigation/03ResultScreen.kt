@@ -41,8 +41,7 @@ fun ResultScreen(
     val mensaje by remember {
         mutableStateOf(
             if (estado == "Victoria") "Has ganado después de $intentosConsumidos intentos"
-            else "Has consumido todos los intentos sin éxito :(\n" +
-                    "La palabra secreta era $secretWord"
+            else "Has consumido todos los intentos sin éxito :(\n" + "La palabra secreta era $secretWord"
         )
     }
     Column(
@@ -83,18 +82,25 @@ fun ResultScreen(
                     )
                 }
             }
-            // BOTÓN "JUGAR DE NUEVO"
+// BOTON "JUGAR DE NUEVO"
+
+// BOTON "JUGAR DE NUEVO"
+
             Box(modifier = Modifier
                 .background(Color.Red, shape = RoundedCornerShape(12.dp))
-                .height(50.dp)
-                .width(120.dp)
+                .height(125.dp)
+                .width(240.dp)
+                .align(alignment = Alignment.CenterHorizontally)
                 .clickable {
                     navController.navigate(Routes.GameScreen.createRoute(dificultadSeleccionada))
-                }) {
+                },
+                contentAlignment = Alignment.Center) {
+
                 Text(
                     text = "Jugar de nuevo",
                     modifier = Modifier.align(Alignment.Center),
                     color = Color.White,
+                    fontSize = 40.sp
                 )
             }
 
@@ -102,13 +108,16 @@ fun ResultScreen(
             Spacer(modifier = Modifier.height(15.dp))
             Box(modifier = Modifier
                 .background(Color.Red, shape = RoundedCornerShape(12.dp))
-                .height(50.dp)
-                .width(120.dp)
+                .height(125.dp)
+                .width(240.dp)
                 .clickable {
                     navController.navigate(Routes.MenuScreen.route)
                 }) {
                 Text(
-                    text = "Menu", modifier = Modifier.align(Alignment.Center), color = Color.White
+                    text = "Menu",
+                    modifier = Modifier.align(Alignment.Center),
+                    color = Color.White,
+                    fontSize = 40.sp
                 )
             }
         }

@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 
@@ -57,8 +58,7 @@ fun MenuScreen(navController: NavController) {
 
             // Logo
             Box(
-                modifier = Modifier
-                    .paint(
+                modifier = Modifier.paint(
                         painterResource(id = R.drawable.amongus),
                         contentScale = ContentScale.FillBounds
                     )
@@ -72,29 +72,28 @@ fun MenuScreen(navController: NavController) {
                 label = { Text("Dificultad") },
                 modifier = Modifier
                     .clickable { expanded = true }
-                    .width(120.dp))
+                    .width(360.dp))
 
             // Selección dificultad
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                modifier = Modifier
-                    .width(120.dp)
+                modifier = Modifier.width(360.dp)
             ) {
                 dificultades.forEach { dificultad ->
                     DropdownMenuItem(text = { Text(text = dificultad) }, onClick = {
                         expanded = false
                         dificultadSeleccionada = dificultad
-                    }, modifier = Modifier
-                        .width(120.dp))
+                    }, modifier = Modifier.width(360.dp)
+                    )
                 }
             }
         }
         // BOTÓN "JUGAR"
         Box(modifier = Modifier
             .background(Color.Red, shape = RoundedCornerShape(12.dp))
-            .height(50.dp)
-            .width(120.dp)
+            .height(125.dp)
+            .width(240.dp)
             .clickable {
                 if (dificultadSeleccionada != "") navController.navigate(
                     Routes.GameScreen.createRoute(
@@ -103,7 +102,10 @@ fun MenuScreen(navController: NavController) {
                 )
             }) {
             Text(
-                text = "Play", modifier = Modifier.align(Alignment.Center), color = Color.White
+                text = "Jugar",
+                modifier = Modifier.align(Alignment.Center),
+                color = Color.White,
+                fontSize = 45.sp
             )
         }
 
@@ -112,24 +114,30 @@ fun MenuScreen(navController: NavController) {
         var show by remember { mutableStateOf(false) }
         Box(modifier = Modifier
             .background(Color.Red, shape = RoundedCornerShape(12.dp))
-            .height(50.dp)
-            .width(120.dp)
+            .height(125.dp)
+            .width(240.dp)
             .clickable { show = true }) {
-            Text(text = "Ayuda", modifier = Modifier.align(Alignment.Center), color = Color.White)
+            Text(
+                text = "Ayuda",
+                modifier = Modifier.align(Alignment.Center),
+                color = Color.White,
+                fontSize = 45.sp
+            )
             MyDialog(show) { show = false }
         }
     }
 }
+
 @Composable
 fun MyDialog(show: Boolean, onDismiss: () -> Unit) {
     if (show) {
-        Dialog(
-            onDismissRequest = { onDismiss() }
-        ) {
+        Dialog(onDismissRequest = { onDismiss() }) {
             Box(
                 modifier = Modifier
-                    .background(Color.Gray.copy(alpha = 0.90f), shape = RoundedCornerShape(12.dp))
-                    .padding(16.dp)
+                    .background(
+                        Color.Gray.copy(alpha = 0.90f), shape = RoundedCornerShape(36.dp)
+                    )
+                    .padding(48.dp)
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -137,18 +145,8 @@ fun MyDialog(show: Boolean, onDismiss: () -> Unit) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "El juego del ahorcado consiste en adivinar una palabra oculta aleatoria " +
-                                "Para adivinar la palabra se tienen que escoger letras para revelar de la palabra " +
-                                "que aparecerá en la parte superior de la pantalla, si la letra escogida está en la palabra " +
-                                "oculta, se revelarán todas las letras coincidentes, en caso contrario, no.\n" +
-                                "\n" +
-                                "===DIFICULTADES===\n" +
-                                "Muy fácil: 6 intentos, longitud de palabra inferior a 6 \n" +
-                                "Fácil: 6 intentos, longitud de palabra inferior a 8 \n" +
-                                "Intermedia: 6 intentos, longitud de palabra inferior a 10\n" +
-                                "Alta: 5 intentos, longitud de palabra inferior a 12\n" +
-                                "Muy alta: 4 intentos, longitud de palabra entre 7 y 20",
-                        modifier = Modifier.padding(8.dp),
+                        text = "El juego del ahorcado consiste en adivinar una palabra oculta aleatoria " + "Para adivinar la palabra se tienen que escoger letras para revelar de la palabra " + "que aparecerá en la parte superior de la pantalla, si la letra escogida está en la palabra " + "oculta, se revelarán todas las letras coincidentes, en caso contrario, no.\n" + "\n" + "===DIFICULTADES===\n" + "Muy fácil: 6 intentos, longitud de palabra inferior a 6 \n" + "Fácil: 6 intentos, longitud de palabra inferior a 8 \n" + "Intermedia: 6 intentos, longitud de palabra inferior a 10\n" + "Alta: 5 intentos, longitud de palabra inferior a 12\n" + "Muy alta: 4 intentos, longitud de palabra entre 7 y 20",
+                        modifier = Modifier.padding(24.dp),
                         textAlign = TextAlign.Center,
                         color = Color.White
                     )
