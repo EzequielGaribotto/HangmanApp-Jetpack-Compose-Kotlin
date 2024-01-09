@@ -30,13 +30,21 @@ fun ResultScreen(
     dificultadSeleccionada: String,
     estado: String,
     intentosConsumidos: Int,
-    secretWord:String
+    secretWord: String
 ) {
-    val mensaje by remember { mutableStateOf(if (estado == "Victoria") "Has ganado después de $intentosConsumidos intentos"
-                                              else "Has consumido todos los intentos sin éxito :(\n" +
-                                                   "La palabra secreta era $secretWord") }
-    val titulo by remember { mutableStateOf( if (estado == "Victoria") "Felicidades"
-                                            else "Oh no")}
+    val titulo by remember {
+        mutableStateOf(
+            if (estado == "Victoria") "Felicidades"
+            else "Oh no"
+        )
+    }
+    val mensaje by remember {
+        mutableStateOf(
+            if (estado == "Victoria") "Has ganado después de $intentosConsumidos intentos"
+            else "Has consumido todos los intentos sin éxito :(\n" +
+                    "La palabra secreta era $secretWord"
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,7 +64,10 @@ fun ResultScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        titulo, modifier = Modifier.align(Alignment.Center), color = Color.Black, fontSize = 43.sp
+                        titulo,
+                        modifier = Modifier.align(Alignment.Center),
+                        color = Color.Black,
+                        fontSize = 43.sp
                     )
                 }
             }
