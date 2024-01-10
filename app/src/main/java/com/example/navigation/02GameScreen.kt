@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -85,40 +84,42 @@ val letrasAbecedario =
         'X', 'Y', 'Z'
     )
 
-data class GameParameters(
-    var intentos: Int = 0,
-    val maxWordLength: Int = 0,
-    val minWordLength: Int = 0
+data class ParametrosJuego(
+    val intentos: Int = 0,
+    val longMaxPalabra: Int = 0,
+    val longMinPalabra: Int = 0
 )
 
-data class GameState(
+data class EstadoJuego(
     var intentosConsumidos: Int = 0,
+    var fallos:Int = 0,
     var indexImagen: Int,
     var ahorcado: Int = R.drawable.hangman00,
     var palabraEscondida: String,
     var letrasPresionadas: Array<Boolean>,
-    var userState: String
+    var estadoUsuario: String
 )
+
+const val filas = 5
+const val columnas = 6
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
-    val params by remember { mutableStateOf(getGameParameters(dificultadSeleccionada)) }
+    val params by remember { mutableStateOf(obtenerParametros(dificultadSeleccionada)) }
     val palabraSecreta by remember { mutableStateOf(encontrarPalabraValida(params, palabras)) }
     val state by remember {
         mutableStateOf(
-            GameState(
+            EstadoJuego(
                 intentosConsumidos = 0,
                 indexImagen = imagenesAhorcado.size - params.intentos,
                 ahorcado = R.drawable.hangman00,
                 palabraEscondida = "_".repeat(palabraSecreta.length),
                 letrasPresionadas = Array(letrasAbecedario.size) { false },
-                userState = "Jugando"
+                estadoUsuario = "Jugando"
             )
         )
     }
-    val filas by remember { mutableIntStateOf(5) }
-    val columnas by remember { mutableIntStateOf(6) }
     var mostrarTextField by remember { mutableStateOf(false) }
     var palabraEscrita by remember { mutableStateOf("") }
     Column(
@@ -156,12 +157,12 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                     contentScale = ContentScale.FillBounds
                 )
         )
-        if (params.intentos > 0) repeat(filas) { filaIndex ->
+        if (state.fallos < params.intentos) repeat(filas) { filaIndex ->
             Row(modifier = Modifier.padding(5.dp)) {
                 repeat(columnas) { colIndex ->
                     val letraIndex = filaIndex * columnas + colIndex
                     if (letraIndex < letrasAbecedario.size) {
-                        var backgroundCharColor by remember { mutableStateOf(Color.White) }
+                        var colorDeFondoCaracter by remember { mutableStateOf(Color.White) }
                         Box(modifier = Modifier
                             .height(50.dp)
                             .width(50.dp)
@@ -171,14 +172,13 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                                 color = Color.Black,
                                 shape = RoundedCornerShape(8.dp)
                             )
-                            .background(backgroundCharColor, shape = RoundedCornerShape(8.dp))
+                            .background(colorDeFondoCaracter, shape = RoundedCornerShape(8.dp))
                             .clickable {
                                 if (!state.letrasPresionadas[letraIndex]) {
-                                    backgroundCharColor =
+                                    colorDeFondoCaracter =
                                         actualizarCaracter(state, letraIndex, palabraSecreta)
                                     actualizarPalabraEscondida(
                                         state,
-                                        params,
                                         palabraSecreta,
                                         letrasAbecedario,
                                         letraIndex
@@ -189,7 +189,7 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                                         palabraSecreta,
                                         palabraEscrita
                                     )
-                                    tryNavigate(
+                                    intentarNavegar(
                                         state,
                                         navController,
                                         dificultadSeleccionada,
@@ -202,7 +202,7 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                                 color = Color.Black,
                                 modifier = Modifier
                                     .align(Alignment.Center)
-                                    .background(backgroundCharColor),
+                                    .background(colorDeFondoCaracter),
                             )
                         }
                     }
@@ -211,12 +211,11 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
         }
         Box(
             modifier = Modifier
-                .background(Color.White)
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
             Text(
-                "INTENTOS: ${params.intentos}",
+                "INTENTOS: ${params.intentos-state.fallos}",
                 modifier = Modifier.align(Alignment.Center),
                 color = Color.Black,
                 fontSize = 43.sp
@@ -252,9 +251,9 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
                 .width(120.dp)
                 .clickable {
                     if (palabraEscrita != "") {
-                        if (palabraEscrita != palabraSecreta) drawNextImage(state, params)
+                        if (palabraEscrita != palabraSecreta) dibujarSiguienteImagen(state)
                         actualizarEstadoDelJuego(state, params, palabraSecreta, palabraEscrita)
-                        tryNavigate(
+                        intentarNavegar(
                             state,
                             navController,
                             dificultadSeleccionada,
@@ -273,47 +272,46 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
     }
 }
 
-fun getGameParameters(dificultad: String): GameParameters {
-    val gameParameters: GameParameters
-    gameParameters = when (dificultad) {
-        "Muy fácil" -> GameParameters(6, 6, 0)
-        "Fácil" -> GameParameters(6, 8, 0)
-        "Intermedia" -> GameParameters(6, 10, 0)
-        "Alta" -> GameParameters(5, 12, 0)
-        else -> GameParameters(4, 20, 7)
+fun obtenerParametros(dificultad: String): ParametrosJuego {
+    val ParametrosJuego: ParametrosJuego
+    ParametrosJuego = when (dificultad) {
+        "Muy fácil" -> ParametrosJuego(6, 6, 0)
+        "Fácil" -> ParametrosJuego(6, 8, 0)
+        "Intermedia" -> ParametrosJuego(6, 10, 0)
+        "Alta" -> ParametrosJuego(5, 12, 0)
+        else -> ParametrosJuego(4, 20, 7)
     }
-    return gameParameters
+    return ParametrosJuego
 }
 
-fun encontrarPalabraValida(params: GameParameters, palabras: Array<String>): String {
-    var validWord = false
-    var randomIndex = (palabras.indices).random()
+fun encontrarPalabraValida(params: ParametrosJuego, palabras: Array<String>): String {
+    var palabraValida = false
+    var indiceRandom = (palabras.indices).random()
 
-    while (!validWord) {
-        if (palabras[randomIndex].length in params.minWordLength until params.maxWordLength) {
-            validWord = true
+    while (!palabraValida) {
+        if (palabras[indiceRandom].length in params.longMinPalabra until params.longMaxPalabra) {
+            palabraValida = true
         } else {
-            randomIndex = (palabras.indices).random()
+            indiceRandom = (palabras.indices).random()
         }
     }
-    val palabraValida = palabras[randomIndex].uppercase()
-    return palabraValida
+    val palabra = palabras[indiceRandom].uppercase()
+    return palabra
 }
 
-fun actualizarCaracter(state: GameState, letraIndex: Int, palabraSecreta: String): Color {
-    val backgroundCharColor: Color
+fun actualizarCaracter(state: EstadoJuego, letraIndex: Int, palabraSecreta: String): Color {
+    val colorDeFondoCaracter: Color
     state.letrasPresionadas[letraIndex] = true
-    backgroundCharColor = if (letrasAbecedario[letraIndex] in palabraSecreta.normalize()) {
+    colorDeFondoCaracter = if (letrasAbecedario[letraIndex] in palabraSecreta.normalize()) {
         Color.Green
     } else {
         Color.Red
     }
-    return backgroundCharColor
+    return colorDeFondoCaracter
 }
 
 fun actualizarPalabraEscondida(
-    state: GameState,
-    params: GameParameters,
+    state: EstadoJuego,
     palabraSecreta: String,
     letrasAbecedario: Array<Char>,
     letraIndex: Int
@@ -325,20 +323,20 @@ fun actualizarPalabraEscondida(
         }
     }
     if (String(newHiddenWord) == state.palabraEscondida) {
-        drawNextImage(state, params)
+        dibujarSiguienteImagen(state)
     }
     state.palabraEscondida = String(newHiddenWord)
 }
 
-fun drawNextImage(state: GameState, params: GameParameters) {
-    params.intentos--
+fun dibujarSiguienteImagen(state: EstadoJuego) {
+    state.fallos++
     state.ahorcado = imagenesAhorcado[state.indexImagen]
     state.indexImagen++
 }
 
 fun actualizarEstadoDelJuego(
-    state: GameState,
-    params: GameParameters,
+    state: EstadoJuego,
+    params: ParametrosJuego,
     palabraSecreta: String,
     palabraEscrita: String
 ) {
@@ -346,10 +344,10 @@ fun actualizarEstadoDelJuego(
     var estado = "Jugando"
     if (state.palabraEscondida == palabraSecreta || palabraEscrita == palabraSecreta.normalize()) {
         estado = "Victoria"
-    } else if (params.intentos == 0) {
+    } else if (params.intentos == state.fallos) {
         estado = "Derrota"
     }
-    state.userState = estado
+    state.estadoUsuario = estado
 }
 
 fun String.normalize(): String {
@@ -362,17 +360,17 @@ fun String.normalize(): String {
     return stringNormalitzat
 }
 
-fun tryNavigate(
-    state: GameState,
+fun intentarNavegar(
+    state: EstadoJuego,
     navController: NavController,
     dificultadSeleccionada: String,
     palabraSecreta: String
 ) {
-    if (state.userState != "Jugando") {
+    if (state.estadoUsuario != "Jugando") {
         navController.navigate(
             Routes.ResultScreen.createRoute(
                 dificultadSeleccionada,
-                state.userState,
+                state.estadoUsuario,
                 state.intentosConsumidos,
                 palabraSecreta
             )

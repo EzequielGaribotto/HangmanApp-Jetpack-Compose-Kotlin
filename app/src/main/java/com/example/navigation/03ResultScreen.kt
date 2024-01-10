@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -78,29 +79,33 @@ fun ResultScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        mensaje, modifier = Modifier.align(Alignment.Center), color = Color.Black
+                        mensaje,
+                        modifier = Modifier.align(Alignment.Center),
+                        color = Color.Black,
+                        fontSize = 18.sp,
                     )
                 }
             }
-// BOTON "JUGAR DE NUEVO"
-
-// BOTON "JUGAR DE NUEVO"
-
-            Box(modifier = Modifier
-                .background(Color.Red, shape = RoundedCornerShape(12.dp))
-                .height(125.dp)
-                .width(240.dp)
-                .align(alignment = Alignment.CenterHorizontally)
-                .clickable {
-                    navController.navigate(Routes.GameScreen.createRoute(dificultadSeleccionada))
-                },
-                contentAlignment = Alignment.Center) {
+            // BOTON "JUGAR DE NUEVO"
+            Box(
+                modifier = Modifier
+                    .background(Color.Red, shape = RoundedCornerShape(12.dp))
+                    .height(100.dp)
+                    .width(200.dp)
+                    .align(alignment = Alignment.CenterHorizontally)
+                    .clickable {
+                        navController.navigate(Routes.GameScreen.createRoute(dificultadSeleccionada))
+                    },
+                contentAlignment = Alignment.Center
+            ) {
 
                 Text(
                     text = "Jugar de nuevo",
                     modifier = Modifier.align(Alignment.Center),
                     color = Color.White,
-                    fontSize = 40.sp
+                    textAlign = TextAlign.Center,
+                    fontSize = 32.sp,
+                    lineHeight = 32.sp
                 )
             }
 
@@ -108,16 +113,17 @@ fun ResultScreen(
             Spacer(modifier = Modifier.height(15.dp))
             Box(modifier = Modifier
                 .background(Color.Red, shape = RoundedCornerShape(12.dp))
-                .height(125.dp)
-                .width(240.dp)
+                .height(100.dp)
+                .width(200.dp)
                 .clickable {
                     navController.navigate(Routes.MenuScreen.route)
                 }) {
                 Text(
-                    text = "Menu",
+                    text = "Menú",
                     modifier = Modifier.align(Alignment.Center),
                     color = Color.White,
-                    fontSize = 40.sp
+                    fontSize = 32.sp,
+                    lineHeight = 32.sp
                 )
             }
         }

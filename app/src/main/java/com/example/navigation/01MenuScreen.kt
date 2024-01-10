@@ -59,7 +59,7 @@ fun MenuScreen(navController: NavController) {
             // Logo
             Box(
                 modifier = Modifier.paint(
-                        painterResource(id = R.drawable.amongus),
+                        painterResource(id = R.drawable.logo),
                         contentScale = ContentScale.FillBounds
                     )
             )
@@ -92,8 +92,8 @@ fun MenuScreen(navController: NavController) {
         // BOTÓN "JUGAR"
         Box(modifier = Modifier
             .background(Color.Red, shape = RoundedCornerShape(12.dp))
-            .height(125.dp)
-            .width(240.dp)
+            .height(80.dp)
+            .width(160.dp)
             .clickable {
                 if (dificultadSeleccionada != "") navController.navigate(
                     Routes.GameScreen.createRoute(
@@ -105,7 +105,7 @@ fun MenuScreen(navController: NavController) {
                 text = "Jugar",
                 modifier = Modifier.align(Alignment.Center),
                 color = Color.White,
-                fontSize = 45.sp
+                fontSize = 32.sp
             )
         }
 
@@ -114,22 +114,22 @@ fun MenuScreen(navController: NavController) {
         var show by remember { mutableStateOf(false) }
         Box(modifier = Modifier
             .background(Color.Red, shape = RoundedCornerShape(12.dp))
-            .height(125.dp)
-            .width(240.dp)
+            .height(80.dp)
+            .width(160.dp)
             .clickable { show = true }) {
             Text(
                 text = "Ayuda",
                 modifier = Modifier.align(Alignment.Center),
                 color = Color.White,
-                fontSize = 45.sp
+                fontSize = 32.sp
             )
-            MyDialog(show) { show = false }
+            HelpDialog(show) { show = false }
         }
     }
 }
 
 @Composable
-fun MyDialog(show: Boolean, onDismiss: () -> Unit) {
+fun HelpDialog(show: Boolean, onDismiss: () -> Unit) {
     if (show) {
         Dialog(onDismissRequest = { onDismiss() }) {
             Box(
@@ -137,7 +137,7 @@ fun MyDialog(show: Boolean, onDismiss: () -> Unit) {
                     .background(
                         Color.Gray.copy(alpha = 0.90f), shape = RoundedCornerShape(36.dp)
                     )
-                    .padding(48.dp)
+                    .padding(16.dp)
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
