@@ -59,9 +59,9 @@ fun MenuScreen(navController: NavController) {
             // Logo
             Box(
                 modifier = Modifier.paint(
-                        painterResource(id = R.drawable.logo),
-                        contentScale = ContentScale.FillBounds
-                    )
+                    painterResource(id = R.drawable.logo),
+                    contentScale = ContentScale.FillBounds
+                )
             )
 
             // Placeholder
@@ -145,7 +145,17 @@ fun HelpDialog(show: Boolean, onDismiss: () -> Unit) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "El juego del ahorcado consiste en adivinar una palabra oculta aleatoria " + "Para adivinar la palabra se tienen que escoger letras para revelar de la palabra " + "que aparecerá en la parte superior de la pantalla, si la letra escogida está en la palabra " + "oculta, se revelarán todas las letras coincidentes, en caso contrario, no.\n" + "\n" + "===DIFICULTADES===\n" + "Muy fácil: 6 intentos, longitud de palabra inferior a 6 \n" + "Fácil: 6 intentos, longitud de palabra inferior a 8 \n" + "Intermedia: 6 intentos, longitud de palabra inferior a 10\n" + "Alta: 5 intentos, longitud de palabra inferior a 12\n" + "Muy alta: 4 intentos, longitud de palabra entre 7 y 20",
+                        text = "El juego del ahorcado consiste en adivinar una palabra oculta aleatoria "+
+                                "Para adivinar la palabra se tienen que escoger letras para revelar de la palabra "+
+                                "que aparecerá en la parte superior de la pantalla, si la letra escogida está en la palabra " +
+                                "oculta, se revelarán todas las letras coincidentes, en caso contrario, no.\n" +
+                                "\n" +
+                                "===DIFICULTADES===\n" +
+                                "Muy fácil: 6 intentos, longitud de palabra inferior a 6 \n" +
+                                "Fácil: 6 intentos, longitud de palabra inferior a 8 \n" +
+                                "Intermedia: 6 intentos, longitud de palabra inferior a 10\n" +
+                                "Alta: 5 intentos, longitud de palabra inferior a 12\n" +
+                                "Muy alta: 4 intentos, longitud de palabra entre 7 y 20",
                         modifier = Modifier.padding(24.dp),
                         textAlign = TextAlign.Center,
                         color = Color.White

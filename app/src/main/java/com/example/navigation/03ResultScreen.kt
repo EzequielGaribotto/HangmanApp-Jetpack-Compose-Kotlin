@@ -57,34 +57,10 @@ fun ResultScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (titulo.isNotBlank()) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.White)
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        titulo,
-                        modifier = Modifier.align(Alignment.Center),
-                        color = Color.Black,
-                        fontSize = 43.sp
-                    )
-                }
+                TextBox(titulo, 48)
             }
             if (mensaje.isNotBlank()) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.White)
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        mensaje,
-                        modifier = Modifier.align(Alignment.Center),
-                        color = Color.Black,
-                        fontSize = 18.sp,
-                    )
-                }
+                TextBox(mensaje, 16)
             }
             // BOTON "JUGAR DE NUEVO"
             Box(
@@ -98,7 +74,6 @@ fun ResultScreen(
                     },
                 contentAlignment = Alignment.Center
             ) {
-
                 Text(
                     text = "Jugar de nuevo",
                     modifier = Modifier.align(Alignment.Center),
@@ -109,7 +84,7 @@ fun ResultScreen(
                 )
             }
 
-            // BOTÓN "VOLVER AL MENÚ"
+            // BOTÓN "MENÚ"
             Spacer(modifier = Modifier.height(15.dp))
             Box(modifier = Modifier
                 .background(Color.Red, shape = RoundedCornerShape(12.dp))
@@ -127,5 +102,22 @@ fun ResultScreen(
                 )
             }
         }
+    }
+}
+@Composable
+fun TextBox(mensaje:String, size:Int) {
+    Box(
+        modifier = Modifier
+            .background(Color.White)
+            .padding(16.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            mensaje,
+            modifier = Modifier.align(Alignment.Center),
+            color = Color.Black,
+            textAlign = TextAlign.Center,
+            fontSize = size.sp,
+        )
     }
 }
