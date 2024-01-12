@@ -1,4 +1,4 @@
-package com.example.navigation
+package com.example.hangman_app
 
 sealed class Routes(val route: String) {
     object MenuScreen : Routes("MenuScreen")

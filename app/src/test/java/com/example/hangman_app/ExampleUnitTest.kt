@@ -1,4 +1,4 @@
-package com.example.navigation
+package com.example.hangman_app
 
 import org.junit.Test
 

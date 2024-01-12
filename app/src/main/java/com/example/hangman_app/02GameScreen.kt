@@ -1,4 +1,4 @@
-package com.example.navigation
+package com.example.hangman_app
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.navigation.R
 
 val palabras = arrayOf(
     "manzana", "pera", "platano", "uva", "sandia",

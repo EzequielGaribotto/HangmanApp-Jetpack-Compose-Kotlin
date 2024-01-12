@@ -1,4 +1,4 @@
-package com.example.navigation.ui.theme
+package com.example.hangman_app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
