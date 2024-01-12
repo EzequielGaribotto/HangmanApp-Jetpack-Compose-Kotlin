@@ -252,7 +252,7 @@ fun GameScreen(navController: NavController, dificultadSeleccionada: String) {
 }
 
 /**
- * Funcion de extension de String que normaliza los caracteres para evitar problemas
+ * Funcion de extension de String que normaliza las vocales para evitar problemas
  * con las tildes
  */
 fun String.normalize(): String {
@@ -270,15 +270,15 @@ fun String.normalize(): String {
  * por el usuario en la anterior pantalla
  */
 fun obtenerParametros(dificultad: String): ParametrosJuego {
-    val ParametrosJuego: ParametrosJuego
-    ParametrosJuego = when (dificultad) {
+    val parametros: ParametrosJuego
+    parametros = when (dificultad) {
         "Muy fácil" -> ParametrosJuego(6, 6, 0)
         "Fácil" -> ParametrosJuego(6, 8, 0)
         "Intermedia" -> ParametrosJuego(6, 10, 0)
         "Alta" -> ParametrosJuego(5, 12, 0)
         else -> ParametrosJuego(4, 20, 7)
     }
-    return ParametrosJuego
+    return parametros
 }
 
 /**
