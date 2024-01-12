@@ -42,7 +42,8 @@ fun ResultScreen(
     val mensaje by remember {
         mutableStateOf(
             if (estado == "Victoria") "Has ganado después de $intentosConsumidos intentos"
-            else "Has consumido todos los intentos sin éxito :(\n" + "La palabra secreta era $secretWord"
+            else "Has consumido todos los intentos sin éxito :(\n" +
+                 "La palabra secreta era $secretWord"
         )
     }
     Column(
@@ -66,8 +67,8 @@ fun ResultScreen(
             Box(
                 modifier = Modifier
                     .background(Color.Red, shape = RoundedCornerShape(12.dp))
-                    .height(100.dp)
-                    .width(200.dp)
+                    .height(80.dp)
+                    .width(160.dp)
                     .align(alignment = Alignment.CenterHorizontally)
                     .clickable {
                         navController.navigate(Routes.GameScreen.createRoute(dificultadSeleccionada))
@@ -88,8 +89,8 @@ fun ResultScreen(
             Spacer(modifier = Modifier.height(15.dp))
             Box(modifier = Modifier
                 .background(Color.Red, shape = RoundedCornerShape(12.dp))
-                .height(100.dp)
-                .width(200.dp)
+                .height(80.dp)
+                .width(160.dp)
                 .clickable {
                     navController.navigate(Routes.MenuScreen.route)
                 }) {
