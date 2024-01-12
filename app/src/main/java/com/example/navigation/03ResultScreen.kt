@@ -34,14 +34,11 @@ fun ResultScreen(
     secretWord: String
 ) {
     val titulo by remember {
-        mutableStateOf(
-            if (estado == "Victoria") "Felicidades"
-            else "Oh no"
-        )
+        mutableStateOf(estado)
     }
     val mensaje by remember {
         mutableStateOf(
-            if (estado == "Victoria") "Has ganado después de $intentosConsumidos intentos"
+            if (estado == "Victoria") "¡Felicidades!\nHas ganado después de $intentosConsumidos intentos"
             else "Has consumido todos los intentos sin éxito :(\n" +
                  "La palabra secreta era $secretWord"
         )

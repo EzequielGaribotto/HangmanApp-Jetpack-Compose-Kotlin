@@ -26,41 +26,39 @@ class MainActivity : ComponentActivity() {
                     val navigationController = rememberNavController()
                     NavHost(
                         navController = navigationController,
-                        startDestination = Routes.SplashScreen.route
+                        startDestination = Routes.MenuScreen.route
                     ) {
-                        composable(Routes.SplashScreen.route) { SplashScreen(navigationController) }
-
                         composable(Routes.MenuScreen.route) { MenuScreen(navigationController) }
                         composable(
                             Routes.GameScreen.route,
-                            arguments = listOf(navArgument("dificultadSeleccionada") {
+                            arguments = listOf(navArgument("dificultad") {
                                 type = NavType.StringType
                             })
                         ) { backStackEntry ->
                             GameScreen(
                                 navigationController,
-                                backStackEntry.arguments?.getString("dificultadSeleccionada")
+                                backStackEntry.arguments?.getString("dificultad")
                                     .orEmpty()
                             )
                         }
                         composable(
                             Routes.ResultScreen.route,
-                            arguments = listOf(navArgument("dificultadSeleccionada") {
+                            arguments = listOf(navArgument("dificultad") {
                                 type = NavType.StringType
                             }, navArgument("estado") {
                                 type = NavType.StringType
-                            }, navArgument("intentosConsumidos") {
+                            }, navArgument("intentos") {
                                 type = NavType.IntType
-                            }, navArgument("secretWord") {
+                            }, navArgument("palabraSecreta") {
                                 type = NavType.StringType
                             })
                         ) { backStackEntry ->
                             ResultScreen(
                                 navigationController,
-                                backStackEntry.arguments?.getString("dificultadSeleccionada").orEmpty(),
+                                backStackEntry.arguments?.getString("dificultad").orEmpty(),
                                 backStackEntry.arguments?.getString("estado").orEmpty(),
-                                backStackEntry.arguments?.getInt("intentosConsumidos") ?: 0,
-                                backStackEntry.arguments?.getString("secretWord").orEmpty()
+                                backStackEntry.arguments?.getInt("intentos") ?: 0,
+                                backStackEntry.arguments?.getString("palabraSecreta").orEmpty()
                             )
                         }
                     }
